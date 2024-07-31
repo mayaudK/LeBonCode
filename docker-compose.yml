@@ -9,6 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: leboncode
     volumes:
+      - $PWD/docker/init.sql:/docker-entrypoint-initdb.d/init.sql
       - admin-leboncode:/var/lib/mysql
 volumes:
   admin-leboncode:
