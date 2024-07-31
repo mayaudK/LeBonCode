@@ -16,28 +16,30 @@ class AdvertRepository extends ServiceEntityRepository
         parent::__construct($registry, Advert::class);
     }
 
-    //    /**
-    //     * @return Advert[] Returns an array of Advert objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function search(float|bool|int|string|null $title, float|bool|int|string|null $priceMin, float|bool|int|string|null $priceMax)
+    {
+        $queryBuilder = $this->createQueryBuilder('q');
 
-    //    public function findOneBySomeField($value): ?Advert
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($title) {
+            $queryBuilder
+                ->andWhere('q.title LIKE :title')
+                ->setParameter('title', '%' . $title . '%');
+        }
+
+        if ($priceMin) {
+            $queryBuilder
+                ->andWhere('q.price >= :priceMin')
+                ->setParameter('priceMin', $priceMin);
+        }
+
+        if ($priceMax) {
+            $queryBuilder
+                ->andWhere('q.price <= :priceMax')
+                ->setParameter('priceMax', $priceMax);
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+    }
 }
