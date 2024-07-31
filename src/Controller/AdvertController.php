@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/api-advert')]
+#[Route('/api')]
 class AdvertController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
