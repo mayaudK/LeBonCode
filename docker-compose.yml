@@ -1,15 +1,36 @@
 version: '3.8'
 services:
+  php-phpmyadmin:
+    image: phpmyadmin:fpm
+    restart: always
+    expose:
+      - "9000"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql
+
+  nginx-leboncode:
+    image: nginx:latest
+    restart: always
+    ports:
+      - 8111:80
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - php-phpmyadmin
+
   mysql:
     image: library/mysql:8.0
     restart: always
     ports:
-      - 3310:3306
+      - "3310:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: leboncode
     volumes:
-      - $PWD/docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
       - admin-leboncode:/var/lib/mysql
 volumes:
   admin-leboncode:
